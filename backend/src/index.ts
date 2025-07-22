@@ -1,12 +1,9 @@
 import { Hono } from 'hono'
 import { userRouter } from './routes/user'
 import { blogRouter } from './routes/blog'
-import { Bindings, Variables } from './types/env'
+import { Env } from './types/env'
 
-const app = new Hono<{
-  Bindings:Bindings,
-  Variables:Variables
-}>()
+const app = new Hono<Env>()
 
 app.route('/api/v1/user', userRouter)
 app.route('/api/v1/blog', blogRouter)
