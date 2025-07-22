@@ -1,9 +1,11 @@
-export type Bindings = {
+
+export type Env = {
+  Bindings: {
     JWT_SECRET: string;
     DATABASE_URL: string;
-  };
-
-export type Variables = {
+  },
+  Variables:{
     prisma:any
     userId:string
   };
+}

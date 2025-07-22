@@ -3,13 +3,10 @@ import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { verify } from 'hono/jwt'
-import { Bindings, Variables } from '../types/env'
+import { z } from 'zod'
+import { Env } from '../types/env'
 
-
-export const blogRouter = new Hono<{
-  Bindings:Bindings,
-  Variables:Variables
-}>()
+export const blogRouter = new Hono<Env>()
 
 blogRouter.use("*", async(c,next)=>{
   const prisma = new PrismaClient({
@@ -19,10 +16,10 @@ blogRouter.use("*", async(c,next)=>{
   await next()
 })
 
-blogRouter.use('/blog/*',async (c,next)=>{
+// middleware
+blogRouter.use('/*',async (c,next)=>{
   let token = c.req.header("Authorization") || ""
   token = token.split(" ")[1]
-  console.log(token)
   try{
     const payload = await verify(token, c.env.JWT_SECRET)
     if(payload){
@@ -30,30 +27,113 @@ blogRouter.use('/blog/*',async (c,next)=>{
       await next()
       return
     }
-    return c.text("Unauthorised user")
+    return c.text("Unauthorised user",401)
   }
   catch(e){
-    return c.text("Unauthorised user")
+    return c.text("Unauthorised user",401)
   }
 })
 
-blogRouter.post('/blog',(c)=>{
-  return c.text("post blog here")
+const bolgSchema = z.object({
+  title:z.string(),
+  content:z.string()
 })
 
-blogRouter.put('/blog',(c)=>{
-  return c.text("put request for blog")
+blogRouter.post('/',async (c)=>{
+  const body = await c.req.json()
+  const { success } = bolgSchema.safeParse(body)
+  const prisma = c.get('prisma')
+  if(!success){
+    return c.text("please enter valid data",406)
+  }
+  try{
+    const author_id = c.get('userId')
+    const blog = await prisma.blogs.create({
+      data:{
+        title:body.title,
+        content:body.content,
+        author_id
+      }
+    })
+    return c.json({
+      blog,
+      msg:"blog created succesfully"
+    },201)
+  }
+  catch(e){
+    return c.text("something went wrong"+e,500)
+  }
 })
 
-blogRouter.get('/blog/bulk',(c)=>{
-  const userId = c.get("userId")
-  console.log(userId)
-  return c.text("get blogs in bulk")
+blogRouter.put('/',async (c)=>{
+  const prisma = c.get("prisma")
+    const body = await c.req.json()
+  try{
+    const updatesBlog = await prisma.blogs.update({
+      where:{
+        id:body.id
+      },
+      data:{
+        title:body.title || undefined,
+        content:body.content || undefined
+      },
+      select:{
+        id:true,
+        title:true,
+        content:true
+      }
+    })
+    console.log(updatesBlog)
+    return c.json({
+      updatesBlog,
+      msg:"blog updates succesfully"
+    },201)
+  }
+  catch(e){
+    return c.text("something went wrong "+e,500)
+  }
 })
 
-blogRouter.get('/blog/:id',(c)=>{
+blogRouter.get('/bulk',async (c)=>{
+  const prisma = c.get('prisma')
+  try{
+    const allBlogs = await prisma.blogs.findMany({
+      select:{
+        id:true,
+        title:true,
+        content:true
+      }
+    })
+    return c.json({
+      allBlogs
+    },200)
+  }
+  catch(e){
+    return c.text("something went wrong "+e, 500)
+  }
+})
+
+
+blogRouter.get('/:id',async (c)=>{
   const id = c.req.param("id")
-  console.log(id)
-  return c.text("get blog")
+  const prisma = c.get('prisma')
+
+  try{
+    const blog = await prisma.blogs.findUnique({
+      where:{
+        id
+      },
+      select:{
+        title:true,
+        content:true
+      }
+    })
+    return c.json({
+      blog
+    },200)
+  }
+  catch(e){
+    return c.text("something went wrong \n"+e,500)
+  }
 })
 

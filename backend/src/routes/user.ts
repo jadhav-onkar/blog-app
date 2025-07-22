@@ -3,12 +3,9 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { z } from 'zod'
 import { sign } from 'hono/jwt'
-import { Bindings, Variables } from '../types/env'
+import { Env } from '../types/env'
 
-export const userRouter = new Hono<{
-  Bindings:Bindings,
-  Variables:Variables
-}>()
+export const userRouter = new Hono<Env>()
 
 userRouter.use("*", async(c,next)=>{
   const prisma = new PrismaClient({
@@ -16,10 +13,6 @@ userRouter.use("*", async(c,next)=>{
       }).$extends(withAccelerate())
   c.set("prisma",prisma)
   await next()
-})
-
-userRouter.get('/', (c) => {
-    return c.text('Hello Hono!')
 })
 
 const userSchema = z.object({
@@ -31,7 +24,7 @@ const userSchema = z.object({
 type User = Pick<z.infer<typeof userSchema>,'email'|'password'>
 
 userRouter.post('/signup',async (c)=>{
-  const body =await c.req.json();
+  const body = await c.req.json();
   const result = userSchema.safeParse(body)
   const prisma = c.get("prisma")
   if (!result.success) {
@@ -47,10 +40,10 @@ userRouter.post('/signup',async (c)=>{
       data: user,
       msg:"sign up succesfully",
       token
-    })
+    },201)
   }
   catch(e){
-    return c.text("something went wrong",404)
+    return c.text("something went wrong",500)
   }
 })
 
@@ -83,11 +76,11 @@ userRouter.post('/signin',async (c)=>{
       return c.json({
         jwt,
         mag:"sign in succesfully"
-      })
+      },200)
     }
   }
   catch(e){
-    return c.text("something went wrong")
+    return c.text("something went wrong",500)
   }
 })
 
