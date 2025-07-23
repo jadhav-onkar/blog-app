@@ -22,7 +22,7 @@ userRouter.post('/signup',async (c)=>{
   const result = signupScheme.safeParse(body)
   const prisma = c.get("prisma")
   if (!result.success) {
-     return c.text(result.error.issues[0].message,403)
+     return c.text("please enter valid inputs",403)
   }
   try{
     const user = await prisma.users.create({

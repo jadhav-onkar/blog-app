@@ -14,13 +14,11 @@ export const SignUpComponent = ()=>{
 
     async function signup(){
         try{
-            const user = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/user/signup`, inputs)
-            console.log(user)
+            await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/user/signup`, inputs)
             alert("sign up")
             navigate('/signin')
         }
         catch(e:any){
-            console.log(e.response.data)
             alert(e.response.data)
         }
     }
@@ -45,7 +43,7 @@ export const SignUpComponent = ()=>{
                                 <label className="font-bold">Password</label>
                                 <input onChange={(e)=>setInputs((i)=>({...i,password:e.target.value}))} className="border border-gray-400 rounded-sm p-2" type="password" />
                             </div>
-                            <SignButton content="Sign Up" onCLicked={signup}/>
+                            <SignButton content="Sign Up" onClick={signup}/>
                 </div>
             </div>
         </div>

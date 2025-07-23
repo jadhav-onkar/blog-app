@@ -1,10 +1,10 @@
 
 type Content = {
     content:string
-    onCLicked:()=>void
+    onClick:()=>void
 }
-export const SignButton = ({content, onCLicked}:Content)=>{
+export const SignButton = ({content, onClick}:Content)=>{
     return(
-        <button onClick={onCLicked} className="bg-black w-full p-2 rounded-md cursor-pointer hover:bg-gray-800 text-white">{content}</button>
+        <button onClick={onClick} className="bg-black w-full p-2 rounded-md cursor-pointer hover:bg-gray-800 text-white">{content}</button>
     )
 }
