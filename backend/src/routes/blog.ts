@@ -5,6 +5,7 @@ import { withAccelerate } from '@prisma/extension-accelerate'
 import { verify } from 'hono/jwt'
 import { z } from 'zod'
 import { Env } from '../types/env'
+import { creatBlogSchema, updateBlogSchema } from '@ganesh0230/medium'
 
 export const blogRouter = new Hono<Env>()
 
@@ -34,14 +35,10 @@ blogRouter.use('/*',async (c,next)=>{
   }
 })
 
-const bolgSchema = z.object({
-  title:z.string(),
-  content:z.string()
-})
 
 blogRouter.post('/',async (c)=>{
   const body = await c.req.json()
-  const { success } = bolgSchema.safeParse(body)
+  const { success } = creatBlogSchema.safeParse(body)
   const prisma = c.get('prisma')
   if(!success){
     return c.text("please enter valid data",406)
@@ -73,31 +70,35 @@ blogRouter.post('/',async (c)=>{
 blogRouter.put('/',async (c)=>{
   const prisma = c.get("prisma")
     const body = await c.req.json()
-  try{
-    const updatesBlog = await prisma.blogs.update({
-      where:{
-        id:body.id
-      },
-      data:{
-        title:body.title || undefined,
-        content:body.content || undefined
-      },
-      select:{
-        id:true,
-        title:true,
-        content:true
-      }
-    })
-    console.log(updatesBlog)
-    return c.json({
-      updatesBlog,
-      msg:"blog updates succesfully"
-    },201)
-  }
-  catch(e){
-    return c.text("something went wrong "+e,500)
-  }
-})
+    const { success } = updateBlogSchema.safeParse(body)
+    if(!success){
+      return c.text("Enter valid data",406)
+    }
+    try{
+      const updatesBlog = await prisma.blogs.update({
+        where:{
+          id:body.id
+        },
+        data:{
+          title:body.title || undefined,
+          content:body.content || undefined
+        },
+        select:{
+          id:true,
+          title:true,
+          content:true
+        }
+      })
+      console.log(updatesBlog)
+      return c.json({
+        updatesBlog,
+        msg:"blog updates succesfully"
+      },201)
+    }
+    catch(e){
+      return c.text("something went wrong "+e,500)
+    }
+  })
 
 blogRouter.get('/bulk',async (c)=>{
   const prisma = c.get('prisma')

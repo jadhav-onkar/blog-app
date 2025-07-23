@@ -1,9 +1,10 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { z } from 'zod'
 import { sign } from 'hono/jwt'
 import { Env } from '../types/env'
+import { signupScheme, signinScheme } from '@ganesh0230/medium'
+
 
 export const userRouter = new Hono<Env>()
 
@@ -15,17 +16,10 @@ userRouter.use("*", async(c,next)=>{
   await next()
 })
 
-const userSchema = z.object({
-  name: z.string(),
-  email: z.string().email("provide valid email"),
-  password:z.string().min(6,"password must be more than 6 characters")
-})
-
-type User = Pick<z.infer<typeof userSchema>,'email'|'password'>
 
 userRouter.post('/signup',async (c)=>{
   const body = await c.req.json();
-  const result = userSchema.safeParse(body)
+  const result = signupScheme.safeParse(body)
   const prisma = c.get("prisma")
   if (!result.success) {
      return c.text(result.error.issues[0].message)
@@ -47,15 +41,10 @@ userRouter.post('/signup',async (c)=>{
   }
 })
 
-const signinSchema = userSchema.pick({
-  email:true,
-  password:true
-})
-
 userRouter.post('/signin',async (c)=>{
   const prisma = c.get('prisma')
   const body = await c.req.json()
-  const { success } = signinSchema.safeParse(body);
+  const { success } = signinScheme.safeParse(body);
 
   if(!success){
     return c.text("Please enter valid inputs")
