@@ -2,7 +2,7 @@
 import { z } from 'zod'
 
 export const signupScheme = z.object({
-    name:z.string(),
+    name:z.string().min(1),
     email:z.string().email(),
     password:z.string().min(6)
 })
@@ -13,8 +13,8 @@ export const signinScheme = z.object({
 })
 
 export const creatBlogSchema = z.object({
-    title:z.string(),
-    content:z.string()
+    title:z.string().min(1),
+    content:z.string().min(1)
 })
 
 export const updateBlogSchema = z.object({
