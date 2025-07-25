@@ -15,7 +15,7 @@ export const FullBlog = ()=>{
 }
     if(loading){
         return <div>
-            <Appbar onclick={routeToCreate} buttontext="Create Blog"  />
+            <Appbar onclick={routeToCreate} buttontext="Create"  />
 
             <div className="flex flex-col lg:grid lg:grid-cols-4 px-8 lg:px-20">
                 <div className="flex flex-col lg:col-span-3">
@@ -80,7 +80,7 @@ export const FullBlog = ()=>{
         </div>
     }
     return<div >
-            <Appbar onclick={routeToCreate} buttontext="Create Blog"  />
+            <Appbar onclick={routeToCreate} buttontext="Create"  />
             <div className="flex flex-col lg:grid lg:grid-cols-4 px-8 lg:px-20">
                 <div className=" lg:col-span-3 lg:border-r border-slate-200 pr-5 pt-10 pb-10">
                     <div className="text-3xl font-bold mb-2">{blog?.title}</div>

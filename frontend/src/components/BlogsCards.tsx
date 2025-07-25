@@ -12,7 +12,7 @@ type BlogCardsProps = {
 
 
 export const BlogsCard = ({name,createdAt,title,content,id}:BlogCardsProps)=>{
-    return <div className="border-b border-slate-200 flex flex-col min-w-lg lg:min-w-4xl px-10  cursor-pointer py-5 hover:bg-slate-50">
+    return <div className="border-b border-slate-200 flex flex-col min-w-sm lg:max-w-4xl px-10  cursor-pointer py-5 hover:bg-slate-50">
             <Link to={`/blogs/${id}`}>
                 <div className="flex gap-2 items-center mb-1">
                     <div className="flex flex-col justify-center">
@@ -24,7 +24,7 @@ export const BlogsCard = ({name,createdAt,title,content,id}:BlogCardsProps)=>{
                 </div>
                 <div>
                     <div className="font-bold text-2xl">{title}</div>
-                    <div className="text-slate-700">{width <500 ?  content.slice(0,75) : content.slice(0,185)}...</div>
+                    <div className="text-slate-700">{width <500 ?  content.slice(0,75) : content.slice(0,235)}...</div>
                     <div className="font-thin text-slate-500">{Math.ceil(content.length / 500)} min</div>
                 </div>
             </Link>
