@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { sign } from 'hono/jwt'
+import { decode, sign, verify } from 'hono/jwt'
 import { Env } from '../types/env'
 import { signupScheme, signinScheme } from '@ganesh0230/medium'
 
@@ -71,6 +71,31 @@ userRouter.post('/signin',async (c)=>{
   }
   catch(e){
     return c.text("something went wrong",500)
+  }
+})
+
+userRouter.get('/userDetails',async (c)=>{
+  const prisma = c.get('prisma')
+  let token = c.req.header('Authorization') || ""
+  token = token.split(" ")[1]
+  try{
+    const userId = await decode(token)
+    const user = await prisma.users.findUnique({
+      where:{
+        id:userId.payload
+      },
+      select:{
+        id:true,
+        name:true
+      }
+    })
+    console.log(user)
+    return c.json({
+      user
+    })
+  }
+  catch(e){
+    return c.text("something went wrong"+e)
   }
 })
 
