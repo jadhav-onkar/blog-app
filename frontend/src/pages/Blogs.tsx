@@ -13,7 +13,7 @@ export const Blogs = ()=>{
     }
 
     if(loading){
-        return <div>
+        return <div className="overflow-x-hidden">
             <Appbar onclick={routeToCreate} buttontext="Create" />
             <div className="flex flex-col items-center">
                     <div role="status" className="animate-pulse mt-5 w-5xl">
@@ -48,7 +48,7 @@ export const Blogs = ()=>{
     }
     return(
         <div>
-            <Appbar onclick={routeToCreate} buttontext="Creat" />
+            <Appbar onclick={routeToCreate} buttontext="Create" />
             <div className="flex flex-col items-center">
                 {blogs.map((blog,index)=>{
                      return ( <BlogsCard key={index} id={blog.id} name={blog.author.name} createdAt="13 oct 2003" title={blog.title} content={blog.content} />)
