@@ -21,11 +21,11 @@ export const FullBlog = ()=>{
     return<div >
             <Appbar onclick={routeToCreate} buttontext="Create Blog"  />
             <div className="flex flex-col lg:grid lg:grid-cols-4 px-8 lg:px-20">
-                <div className=" lg:col-span-3 lg:border-r border-slate-200 pr-5 pt-10">
+                <div className=" lg:col-span-3 lg:border-r border-slate-200 pr-5 pt-10 pb-10">
                     <div className="text-3xl font-bold mb-2">{blog?.title}</div>
                     <div className="text-slate-800">{blog?.content}</div>
                 </div>
-                <div className="lg:pl-10">
+                <div className="lg:pl-10 pt-5">
                     <div>Author</div>
                     <div className="flex mt-5 lg:mt-2 mb-10">
                         <div className="flex flex-col justify-center mr-2">
