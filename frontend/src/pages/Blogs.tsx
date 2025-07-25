@@ -14,7 +14,36 @@ export const Blogs = ()=>{
 
     if(loading){
         return <div>
-            Loading...
+            <Appbar onclick={routeToCreate} buttontext="Create Blog" />
+            <div className="flex flex-col items-center">
+                    <div role="status" className="animate-pulse mt-5 w-5xl">
+                        <div className="h-2.5 bg-gray-200 rounded-full h-4  w-100 mb-4"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4   max-w-4xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4   max-w-3xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-3xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-4xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-3xl"></div>
+                        <span className="sr-only">Loading...</span>
+                    </div>  
+                    <div role="status" className="animate-pulse mt-5 w-5xl">
+                        <div className="h-2.5 bg-gray-200 rounded-full h-4  w-100 mb-4"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4   max-w-4xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4   max-w-3xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-3xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-4xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-3xl"></div>
+                        <span className="sr-only">Loading...</span>
+                    </div>  
+                    <div role="status" className="animate-pulse mt-5 w-5xl">
+                        <div className="h-2.5 bg-gray-200 rounded-full h-4  w-100 mb-4"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4   max-w-4xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4   max-w-3xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-3xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-4xl mb-2.5"></div>
+                        <div className="h-2 bg-gray-200 rounded-full h-4  max-w-3xl"></div>
+                        <span className="sr-only">Loading...</span>
+                    </div>   
+            </div>
         </div>
     }
     return(
