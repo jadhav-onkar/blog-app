@@ -63,6 +63,7 @@ userRouter.post('/signin',async (c)=>{
     else{
       const jwt = await sign(user.id, c.env.JWT_SECRET)
       return c.json({
+        name:user.name,
         jwt,
         mag:"sign in succesfully"
       },200)

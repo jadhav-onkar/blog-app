@@ -107,7 +107,12 @@ blogRouter.get('/bulk',async (c)=>{
       select:{
         id:true,
         title:true,
-        content:true
+        content:true,
+        author:{
+          select:{
+            name:true
+          }
+        }
       }
     })
     return c.json({
@@ -130,8 +135,14 @@ blogRouter.get('/:id',async (c)=>{
         id
       },
       select:{
+        id:true,
         title:true,
-        content:true
+        content:true,
+        author:{
+          select:{
+            name:true
+          }
+        }
       }
     })
     return c.json({
